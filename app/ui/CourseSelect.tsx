@@ -10,13 +10,14 @@ import { Course } from "@/app/lib/definitions"
 
 interface CourseSelectionProps {
   updateSelectedCourses: (course: Course) => void
+  setSearching: (searching: boolean) => void
+  removeCourse: (course: Course) => void
 }
 
-export default function CourseSelect({ updateSelectedCourses }: CourseSelectionProps) {
+export default function CourseSelect({ updateSelectedCourses, setSearching, removeCourse }: CourseSelectionProps) {
   const [search, setSearch] = React.useState<string>("");
   const [searchedCourses, setSearchedCourses] = React.useState<Course[]>([]);
   const debouncedSearch = useDebounce(search, 500);
-
   React.useEffect(() => {
     if (debouncedSearch === "") {
       setSearchedCourses([]);
@@ -47,6 +48,7 @@ export default function CourseSelect({ updateSelectedCourses }: CourseSelectionP
           time: item["Exam Time"],
           room: item["Room"],
         });
+        setSearching(true);
       }
     });
     setSearchedCourses(searchedData)
@@ -66,10 +68,14 @@ export default function CourseSelect({ updateSelectedCourses }: CourseSelectionP
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search to add courses"
         />
-        {searchedCourses.length !== 0 && <div className="text-lg font-semibold my-5">Search Results</div>}
+        {searchedCourses.length !== 0 &&
+          <div className="text-lg font-semibold my-5">
+            Search Results
+          </div>}
+
       </div>
       <div className={`w-full flex gap-5 flex-wrap justify-center`}>
-        {searchedCourses.map(item => <SingleExamCard key={item.name} updateSelection={updateSelectedCourses} ExamData={item} />)}
+        {searchedCourses.map(item => <SingleExamCard key={item.name} removeCourse={removeCourse} updateSelection={updateSelectedCourses} ExamData={item} />)}
       </div>
     </>
   )

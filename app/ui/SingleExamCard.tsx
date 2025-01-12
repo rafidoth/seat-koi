@@ -25,6 +25,7 @@ import { data } from '@/app/lib/data';
 interface SingleExamCardProps {
   ExamData: Course
   updateSelection: (course: Course) => void
+  removeCourse: (course: Course) => void
 }
 const getSectionList = function(data: Data[], course: Course) {
   const sectionList = new Set<string>();
@@ -33,7 +34,12 @@ const getSectionList = function(data: Data[], course: Course) {
   return Array.from(sectionList);
 }
 
-export default function SingleExamCard({ ExamData, updateSelection }: SingleExamCardProps) {
+const checkAllFields = function(course: Course) {
+  return Object.values(course).every(value => value !== "");
+}
+
+export default function SingleExamCard({ ExamData, updateSelection, removeCourse }: SingleExamCardProps) {
+  const [selected, setSelected] = React.useState<boolean>(false);
   const [exam, setExam] = React.useState<Course>({
     dept: ExamData.dept,
     name: ExamData.name,
@@ -68,7 +74,9 @@ export default function SingleExamCard({ ExamData, updateSelection }: SingleExam
           <span>{exam.code}</span>
         </p>
         <div className={`text-lg flex justify-between`}>
-          <span>Course Teacher <strong>{exam.teacher}</strong></span>
+          {exam.teacher !== "" &&
+            <span>Course Teacher <strong>{exam.teacher}</strong></span>
+          }
           <span>
             <Select value={section} onValueChange={setSection}>
               <SelectTrigger className="w-[180px]">
@@ -88,12 +96,31 @@ export default function SingleExamCard({ ExamData, updateSelection }: SingleExam
         <CardDescription ></CardDescription>
       </CardHeader>
       <CardContent>
-        <p className={`text-lg flex items-center gap-x-4 my-2`}> Exam Date<span className={`bg-orange-600 px-1 rounded`}><strong>{exam.date}</strong></span></p>
-        <p className={`text-lg flex items-center gap-x-4 my-2`}> Exam Time <span className={`bg-orange-600 px-1 rounded`}><strong>{exam.time}</strong></span></p>
-        <p className={`text-lg flex items-center gap-x-4`}> Room Range with Id<span className={`px-1 rounded`}><strong>{exam.room}</strong></span></p>
+        {exam.date !== "" &&
+          <p className={`text-lg flex items-center gap-x-4 my-2`}> Exam Date<span className={`bg-orange-600 px-1 rounded`}><strong>{exam.date}</strong></span></p>
+        }
+        {exam.time !== "" &&
+          <p className={`text-lg flex items-center gap-x-4 my-2`}> Exam Time <span className={`bg-orange-600 px-1 rounded`}><strong>{exam.time}</strong></span></p>
+        }
+        {
+          exam.room !== "" &&
+          <p className={`text-lg flex items-center gap-x-4`}> Room Range with Id<span className={`px-1 rounded`}><strong>{exam.room}</strong></span></p>
+        }
       </CardContent>
       <CardFooter>
-        <Button className={``} variant={`outline`} size={`lg`} onClick={() => updateSelection(ExamData)}>Add Course</Button>
+        {checkAllFields(exam) && !selected &&
+          < Button className={``} variant={`outline`} size={`lg`} onClick={() => {
+            updateSelection(exam)
+            setSelected(true)
+          }}>Add Course</Button>
+        }
+
+        {selected &&
+          <Button className={``} variant={`destructive`} size={`lg`} onClick={() => {
+            removeCourse(exam)
+            setSelected(false)
+          }}>Remove Course</Button>
+        }
       </CardFooter>
     </Card >
   );
