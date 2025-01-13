@@ -27,7 +27,6 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -127,7 +126,7 @@ export default function Home() {
           </div>
         </div>
         <Hero searching={searching} />
-        <CourseSelect setSearching={setSearching} updateSelectedCourses={handleSelection} removeCourse={removeCourse} />
+        <CourseSelect searching={searching} setSearching={setSearching} updateSelectedCourses={handleSelection} removeCourse={removeCourse} />
       </main >
     </div >)
 }

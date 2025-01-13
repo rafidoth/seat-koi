@@ -12,9 +12,10 @@ interface CourseSelectionProps {
   updateSelectedCourses: (course: Course) => void
   setSearching: (searching: boolean) => void
   removeCourse: (course: Course) => void
+  searching: boolean
 }
 
-export default function CourseSelect({ updateSelectedCourses, setSearching, removeCourse }: CourseSelectionProps) {
+export default function CourseSelect({ updateSelectedCourses, searching, setSearching, removeCourse }: CourseSelectionProps) {
   const [search, setSearch] = React.useState<string>("");
   const [searchedCourses, setSearchedCourses] = React.useState<Course[]>([]);
   const debouncedSearch = useDebounce(search, 500);
@@ -52,7 +53,7 @@ export default function CourseSelect({ updateSelectedCourses, setSearching, remo
       }
     });
     setSearchedCourses(searchedData)
-  }, [debouncedSearch])
+  }, [debouncedSearch, searching])
 
 
 
