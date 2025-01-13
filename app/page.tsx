@@ -38,7 +38,7 @@ const TableKeys = ["Dept", "Course", "Code", "Section", "Teacher", "Date", "Time
 export default function Home() {
   const [selectedCourses, setSelectedCourses] = React.useState<Course[]>([]);
   const [searching, setSearching] = React.useState<boolean>(false);
-  const tableRef = React.useRef<HTMLElement>(null);
+  const tableRef = React.useRef<HTMLDivElement>(null);
   const handleSelection = function(course: Course) {
     if (!selectedCourses.some(item => item.name === course.name)) {
       setSelectedCourses([...selectedCourses, course]);
@@ -49,14 +49,16 @@ export default function Home() {
     setSelectedCourses(selectedCourses.filter(item => item.name !== course.name));
   }
   const exportPDF = () => {
-    const doc = new jsPDF("p", "mm", "a4");
-    doc.html(tableRef.current, {
-      callback: function(doc) {
-        doc.save("fall24_mid.pdf");
-      },
-      x: 10,
-      y: 10,
-    });
+    if (tableRef.current) {
+      const doc = new jsPDF("p", "mm", "a4");
+      doc.html(tableRef.current, {
+        callback: function(doc) {
+          doc.save("fall24_mid.pdf");
+        },
+        x: 10,
+        y: 10,
+      });
+    }
   };
   return (
     <div className="relative min-h-screen flex flex-col items-center text-white">
