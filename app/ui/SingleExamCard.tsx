@@ -65,7 +65,7 @@ export default function SingleExamCard({ ExamData, updateSelection, removeCourse
     }
   }, [section]);
   return (
-    <Card className={`${inter.className} w-1/4`}>
+    <Card className={`${inter.className} lg:w-[500px] md:w-[350]`}>
       <CardHeader>
         <p className={`text-xl flex justify-between`}>
           <span><strong> {exam.name} </strong></span>

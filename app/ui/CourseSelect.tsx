@@ -60,7 +60,7 @@ export default function CourseSelect({ updateSelectedCourses, searching, setSear
   return (
     <>
       <div
-        className={`w-4/12`}
+        className={`w-5/6 lg:w-4/12`}
       >
         <Input
           type="text"
@@ -75,8 +75,10 @@ export default function CourseSelect({ updateSelectedCourses, searching, setSear
           </div>}
 
       </div>
-      <div className={`w-full flex gap-5 flex-wrap justify-center`}>
-        {searchedCourses.map(item => <SingleExamCard key={item.name} removeCourse={removeCourse} updateSelection={updateSelectedCourses} ExamData={item} />)}
+      <div className="w-full flex justify-center">
+        <div className={` grid gap-3 m-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3`}>
+          {searchedCourses.map(item => <SingleExamCard key={item.name} removeCourse={removeCourse} updateSelection={updateSelectedCourses} ExamData={item} />)}
+        </div>
       </div>
     </>
   )
